@@ -42,7 +42,7 @@ public class VendaController {
     private ResponseEntity<Page<VendaModel>> listarTodasVendas(@PageableDefault(page = 0, size = 10, sort = "data", direction = Sort.Direction.ASC) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(vendaService.findAll(pageable));
     }
-    @GetMapping("/listar/{id}")
+    @GetMapping("/{id}")
     private ResponseEntity<Object> listarVendaPorId(@PathVariable(value = "id") Long id){
         Optional<VendaModel> vendaOptional = vendaService.findById(id);
         if(!vendaOptional.isPresent()){

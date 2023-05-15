@@ -28,7 +28,7 @@ import com.xbrain.api.vendascontrol.models.VendedorModel;
 import com.xbrain.api.vendascontrol.services.VendedorService;
 
 @RestController
-@RequestMapping("/vendedor")
+@RequestMapping("/vendedores")
 public class VendedorController {
     
     @Autowired
@@ -39,7 +39,7 @@ public class VendedorController {
     private ResponseEntity<Page<VendedorModel>> listarTodasVendas(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(vendedorService.findAll(pageable));
     }
-    @GetMapping("/listar/{id}")
+    @GetMapping("/{id}")
     private ResponseEntity<Object> listarVendedorPorId(@PathVariable(value = "id") Long id){
         Optional<VendedorModel> vendedorOptional = vendedorService.findById(id);
         if(!vendedorOptional.isPresent()){

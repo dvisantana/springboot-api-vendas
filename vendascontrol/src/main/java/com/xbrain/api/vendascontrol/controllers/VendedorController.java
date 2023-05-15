@@ -46,6 +46,15 @@ public class VendedorController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(vendedorOptional.get());
     }
+    // Metodo personalizado para apresentar o resumo(Nome,Total de Vendas,Media Diaria de Vendas (No periodo/data informado))
+    @GetMapping("/resumo")
+    private ResponseEntity<Object> resumoVendedor(String dataInicio, String dataFim){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(vendedorService.resumoVendedores(LocalDate.parse(dataInicio),LocalDate.parse(dataFim)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Erro! verifique os parametros informados (Padrão para datas: 'yyyy-MM-dd')");
+        }
+    }
     // ================ Metodos GET ================ //
     
     // ================ Metodos POST ================ //

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xbrain.api.vendascontrol.models.VendaModel;
+import com.xbrain.api.vendascontrol.models.VendedorDto;
 import com.xbrain.api.vendascontrol.models.VendedorModel;
 import com.xbrain.api.vendascontrol.services.VendedorService;
 
@@ -59,21 +60,22 @@ public class VendedorController {
     
     // ================ Metodos POST ================ //
     @PostMapping("/cadastrar")
-    private ResponseEntity<Object> cadastrarVendedor(@RequestBody VendedorModel vendedor){
+    private ResponseEntity<Object> cadastrarVendedor(@RequestBody VendedorDto vendedorDTO){
+        var vendedor = new VendedorModel(vendedorDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(vendedorService.save(vendedor));
     }
     // ================ Metodos POST ================ //
 
     // ================ Metodos PUT ================ //
     @PutMapping("/alterar/{id}")
-    private ResponseEntity<Object> alterarVendedor(@PathVariable(value = "id") Long id, @RequestBody VendedorModel vendedorDTO){
+    private ResponseEntity<Object> alterarVendedor(@PathVariable(value = "id") Long id, @RequestBody VendedorDto vendedorDTO){
         Optional<VendedorModel> vendedorOptional = vendedorService.findById(id);
         if(!vendedorOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vendedor não encontrado!");
         }
 
-        var vendedor = vendedorOptional.get();
-        vendedor.setNome(vendedorDTO.getNome());
+        var vendedor = new VendedorModel(vendedorDTO);
+        vendedor.setId(vendedorOptional.get().getId());
         return ResponseEntity.status(HttpStatus.OK).body(vendedorService.save(vendedor));
     }
     // ================ Metodos PUT ================ //

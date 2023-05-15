@@ -23,4 +23,10 @@ public class VendedorModel {
     @Column(nullable = false)
     private String nome;
 
+    public VendedorModel(){}
+
+    public VendedorModel(VendedorDto vendedorDto){
+        this.nome = vendedorDto.getNome();
+    }
+
 }

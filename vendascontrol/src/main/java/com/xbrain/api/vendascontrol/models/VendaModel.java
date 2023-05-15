@@ -1,6 +1,7 @@
 package com.xbrain.api.vendascontrol.models;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 // import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
@@ -33,5 +34,15 @@ public class VendaModel {
     @OneToOne
     @JoinColumn(name = "id_vendedor", referencedColumnName = "id")
     private VendedorModel vendedor;
+
+    public VendaModel(){}
+
+    public VendaModel(VendaDto vendaCreateModel){
+        this.valor = vendaCreateModel.getValor();
+        this.data = LocalDateTime.now(ZoneId.of("UTC"));
+        this.vendedor = new VendedorModel();
+        this.vendedor.setId(vendaCreateModel.getVendedor());
+    }
+    
 
 }

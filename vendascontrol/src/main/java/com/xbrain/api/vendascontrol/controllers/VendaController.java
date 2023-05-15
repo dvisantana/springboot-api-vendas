@@ -22,8 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.xbrain.api.vendascontrol.models.VendaDto;
 import com.xbrain.api.vendascontrol.models.VendaModel;
+import com.xbrain.api.vendascontrol.models.VendedorModel;
 import com.xbrain.api.vendascontrol.services.VendaService;
+import com.xbrain.api.vendascontrol.services.VendedorService;
 
 @RestController
 @RequestMapping("/vendas")
@@ -31,6 +34,8 @@ public class VendaController {
 
     @Autowired
     private VendaService vendaService;
+    @Autowired
+    private VendedorService vendedorService;
 
     // ================ Metodos GET ================ //
     @GetMapping("/listar")
@@ -49,23 +54,41 @@ public class VendaController {
 
     // ================ Metodos POST ================ //
     @PostMapping("/cadastrar")
-    private ResponseEntity<Object> cadastrarVenda(@RequestBody VendaModel venda){
-        venda.setData(LocalDateTime.now(ZoneId.of("UTC")));
+    private ResponseEntity<Object> cadastrarVenda(@RequestBody VendaDto vendaDTO){
+
+        // Validações para tratar possiveis entradas inviaveis
+        Optional<VendedorModel> vendedorOptional = vendedorService.findById(vendaDTO.getVendedor());
+        if(vendaDTO.getValor() <= 0){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Valor informado inferior ou igual a 0.");
+        }
+        if(!vendedorOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Vendedor não encontrado!");
+        }
+        var venda = new VendaModel(vendaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(vendaService.save(venda));
     }
     // ================ Metodos POST ================ //
 
     // ================ Metodos PUT ================ //
     @PutMapping("/alterar/{id}")
-    private ResponseEntity<Object> alterarVenda(@PathVariable(value = "id") Long id, @RequestBody VendaModel vendaDTO){
+    private ResponseEntity<Object> alterarVenda(@PathVariable(value = "id") Long id, @RequestBody VendaDto vendaDTO){
+
+        // Validações para tratar possiveis entradas inviaveis
         Optional<VendaModel> vendaOptional = vendaService.findById(id);
+        Optional<VendedorModel> vendedorOptional = vendedorService.findById(vendaDTO.getVendedor());
         if(!vendaOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Venda não encontrada!");
+        }        
+        if(vendaDTO.getValor() <= 0){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Valor informado inferior ou igual a 0.");
+        }
+        if(!vendedorOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Vendedor não encontrado!");
         }
 
-        var venda = vendaOptional.get();
-        venda.setValor(vendaDTO.getValor());
-        venda.setVendedor(vendaDTO.getVendedor());
+        var venda = new VendaModel(vendaDTO);
+        venda.setId(vendaOptional.get().getId());
+        venda.setData(vendaOptional.get().getData());
         return ResponseEntity.status(HttpStatus.OK).body(vendaService.save(venda));
     }
     // ================ Metodos PUT ================ //

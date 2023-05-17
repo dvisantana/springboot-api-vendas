@@ -3,6 +3,8 @@ package com.xbrain.api.vendascontrol.models;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+import com.xbrain.api.vendascontrol.dtos.VendaDto;
+
 // import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

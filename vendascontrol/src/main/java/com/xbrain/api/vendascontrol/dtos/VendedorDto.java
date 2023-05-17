@@ -1,4 +1,4 @@
-package com.xbrain.api.vendascontrol.models;
+package com.xbrain.api.vendascontrol.dtos;
 
 public class VendedorDto {
     

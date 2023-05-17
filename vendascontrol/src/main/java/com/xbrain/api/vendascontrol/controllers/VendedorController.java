@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.xbrain.api.vendascontrol.dtos.VendedorDto;
 import com.xbrain.api.vendascontrol.models.VendaModel;
-import com.xbrain.api.vendascontrol.models.VendedorDto;
 import com.xbrain.api.vendascontrol.models.VendedorModel;
 import com.xbrain.api.vendascontrol.services.VendedorService;
 
@@ -47,12 +47,28 @@ public class VendedorController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(vendedorOptional.get());
     }
+
     // Metodo personalizado para apresentar o resumo(Nome,Total de Vendas,Media Diaria de Vendas (No periodo/data informado))
     @GetMapping("/resumo")
     private ResponseEntity<Object> resumoVendedor(String dataInicio, String dataFim){
+        // Testar se foi um sucesso a coleta das datas
         try {
+            // Verificação de datas, para conferir se dataInicio vem depois da dataFim
+            if(LocalDate.parse(dataInicio).isAfter(LocalDate.parse(dataFim))){
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Data Inicial não pode estar depois da data final.");
+            }
+            // Se estiver tudo correto fará o resumo corretamente:
             return ResponseEntity.status(HttpStatus.OK).body(vendedorService.resumoVendedores(LocalDate.parse(dataInicio),LocalDate.parse(dataFim)));
         } catch (Exception e) {
+            // Validação de parâmetros nullos
+            if(dataInicio == null || dataFim == null){
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Parâmetros não informados! (?dataInicio=&dataFim=)");
+            }
+            // Validação de parâmetros vazios
+            if(dataInicio.isEmpty() || dataFim.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Parâmetros informados, porém vazios! (?dataInicio=yyyy-MM-dd&dataFim=yyyy-MM-dd)");
+            }
+            // Parâmetros informados porém não foi armazedado
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Erro! verifique os parametros informados (Padrão para datas: 'yyyy-MM-dd')");
         }
     }
@@ -61,6 +77,9 @@ public class VendedorController {
     // ================ Metodos POST ================ //
     @PostMapping("/cadastrar")
     private ResponseEntity<Object> cadastrarVendedor(@RequestBody VendedorDto vendedorDTO){
+        if(vendedorDTO.getNome().isEmpty() || vendedorDTO.getNome().length() < 2){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Nome informado inválido!");
+        }
         var vendedor = new VendedorModel(vendedorDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(vendedorService.save(vendedor));
     }
@@ -73,7 +92,9 @@ public class VendedorController {
         if(!vendedorOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vendedor não encontrado!");
         }
-
+        if(vendedorDTO.getNome().isEmpty() || vendedorDTO.getNome().length() < 2){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Nome informado inválido!");
+        }
         var vendedor = new VendedorModel(vendedorDTO);
         vendedor.setId(vendedorOptional.get().getId());
         return ResponseEntity.status(HttpStatus.OK).body(vendedorService.save(vendedor));

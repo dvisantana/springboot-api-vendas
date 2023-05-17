@@ -1,5 +1,7 @@
 package com.xbrain.api.vendascontrol.models;
 
+import com.xbrain.api.vendascontrol.dtos.VendedorDto;
+
 // import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

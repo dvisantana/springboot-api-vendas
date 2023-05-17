@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.xbrain.api.vendascontrol.models.VendaDto;
+import com.xbrain.api.vendascontrol.dtos.VendaDto;
 import com.xbrain.api.vendascontrol.models.VendaModel;
 import com.xbrain.api.vendascontrol.models.VendedorModel;
 import com.xbrain.api.vendascontrol.services.VendaService;
@@ -59,10 +59,10 @@ public class VendaController {
         // Validações para tratar possiveis entradas inviaveis
         Optional<VendedorModel> vendedorOptional = vendedorService.findById(vendaDTO.getVendedor());
         if(vendaDTO.getValor() <= 0){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Valor informado inferior ou igual a 0.");
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Valor informado inválido.");
         }
         if(!vendedorOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Vendedor não encontrado!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vendedor não encontrado!");
         }
         var venda = new VendaModel(vendaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(vendaService.save(venda));
@@ -80,10 +80,10 @@ public class VendaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Venda não encontrada!");
         }        
         if(vendaDTO.getValor() <= 0){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Valor informado inferior ou igual a 0.");
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Valor informado inválido.");
         }
         if(!vendedorOptional.isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Vendedor não encontrado!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vendedor não encontrado!");
         }
 
         var venda = new VendaModel(vendaDTO);

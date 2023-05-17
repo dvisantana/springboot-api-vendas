@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.xbrain.api.vendascontrol.dtos.VendaDto;
 import com.xbrain.api.vendascontrol.models.VendaModel;
 import com.xbrain.api.vendascontrol.repositories.VendaRepository;
 

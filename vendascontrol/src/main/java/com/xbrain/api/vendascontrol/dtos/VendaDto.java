@@ -1,9 +1,4 @@
-package com.xbrain.api.vendascontrol.models;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
-import org.springframework.cglib.core.Local;
+package com.xbrain.api.vendascontrol.dtos;
 
 public class VendaDto {
 

@@ -1,3 +1,5 @@
+// DataConfig -> Configuração do formato padrão de datas (seguindo horario UTC)
+
 package com.xbrain.api.vendascontrol.configs;
 
 import java.time.format.DateTimeFormatter;

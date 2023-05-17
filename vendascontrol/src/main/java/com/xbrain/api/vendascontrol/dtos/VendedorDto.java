@@ -4,7 +4,7 @@ public class VendedorDto {
     
     private String nome;
 
-    //Getters & Setters
+    //Getters & Setters - Nome
     public String getNome(){
         return nome;
     }

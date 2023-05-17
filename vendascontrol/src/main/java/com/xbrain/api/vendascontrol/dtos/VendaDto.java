@@ -5,14 +5,15 @@ public class VendaDto {
     private double valor;
     private long vendedor;
 
-    //Getters & Setters
+    //Getters & Setters - Valor
     public double getValor() {
         return valor;
     }
     public void setValor(double valor) {
         this.valor = valor;
     }
-
+    
+    //Getters & Setters - Vendedor
     public long getVendedor() {
         return vendedor;
     }

@@ -39,8 +39,10 @@ public class VendedorService {
         }
         // ================ CRUD Padrão ================ //
 
+        // ================ Metodo Personalizado para retornar resumo de vendedores ================ //
         public Iterable<ResumoVendedor> resumoVendedores(LocalDate dataIn, LocalDate dataFim){
             return vendedorRepository.resumoVendedores(dataIn.atStartOfDay(),dataFim.atStartOfDay());
         }
+        // ================ Metodo Personalizado para retornar resumo de vendedores ================ //
 
 }

@@ -1,3 +1,4 @@
+# Destinado a configuracao do banco H2
 spring:
 
     datasource:

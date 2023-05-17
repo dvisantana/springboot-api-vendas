@@ -1,3 +1,6 @@
+-- Arquivo para inserir dados no banco assim que inicializar a aplicação
+-- Usado para testes / Se necessário pode ser excluido
+
 INSERT INTO TB_VENDEDORES VALUES (341,'Joao')
 INSERT INTO TB_VENDEDORES VALUES (562,'Pedro')
 INSERT INTO TB_VENDEDORES VALUES (783,'Joaquim')
